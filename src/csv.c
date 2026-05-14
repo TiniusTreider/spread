@@ -75,7 +75,7 @@ static inline struct date *parse_csv(
 
 struct date *csv_init(char *path)
 {
-        const char *file = io_read_file(path);
+        char *file = io_read_file(path);
 
         size_t line_count = 0;
         size_t length = 0;
