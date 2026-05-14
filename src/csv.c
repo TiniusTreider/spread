@@ -9,11 +9,12 @@
 
 static inline size_t line_length(char *line)
 {
-        char *c = strchr(line, '\n');
-        if (c != NULL)
-                return (size_t)(c - line);
+        char *c;
+        c = strchr(line, '\n');
+        if (c == NULL)
+                c = line + strlen(line);
 
-        return strlen(line);
+        return (size_t)(c - line);
 }
 
 const int months[] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };

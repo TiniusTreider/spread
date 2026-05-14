@@ -1,6 +1,8 @@
 #include "control.h"
 #include "csv.h"
 
+#include <dirent.h>
+
 #define PATH "/home/tinius/stocks/"
 
 void parse(void)
