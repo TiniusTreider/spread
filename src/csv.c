@@ -1,5 +1,4 @@
 #include "csv.h"
-#include "error.h"
 #include "io.h"
 #include "memory.h"
 
@@ -17,20 +16,7 @@ static inline size_t line_length(char *line)
         return strlen(line);
 }
 
-const int months[12] = {
-        0,
-        31,
-        59,
-        90,
-        120,
-        151,
-        181,
-        212,
-        243,
-        273,
-        304,
-        334
-};
+const int months[] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
 
 static inline struct date parse_csv_line(char *file, size_t place)
 {
