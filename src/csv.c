@@ -18,14 +18,16 @@ static inline size_t line_length(char *line)
         return (size_t)(c - line);
 }
 
-const int months[] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
+const int month_days[] = {
+        0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334
+};
 
 static inline size_t unix_days(int day, int month, int year)
 {
         const int u_year = year - 1970;
         int leap_years = month > 2 ? (u_year + 2) / 4 : (u_year + 1) / 4;
 
-        return day + months[month] + u_year * 365 + leap_years;
+        return day + month_days[month - 1] + u_year * 365 + leap_years;
 }
 
 #define PARSE_FAIL "Failed to parse line"
