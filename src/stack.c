@@ -19,7 +19,7 @@ struct stack *s_init(void)
 
         stack->size = START_SIZE;
         stack->occupancy = 0;
-        stack->data = smalloc(stack->size);
+        stack->data = smalloc(stack->size * sizeof(struct date *));
 
         return stack;
 }
@@ -38,7 +38,9 @@ struct date *s_index(struct stack *stack, size_t index)
 static inline void s_grow(struct stack *stack)
 {
         stack->size += GROW_SIZE;
-        stack->data = srealloc(stack->data, stack->size);
+        stack->data = srealloc(
+                stack->data, stack->size * sizeof(struct date*)
+        );
 }
 
 void s_push(struct stack *stack, struct date *c)
