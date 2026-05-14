@@ -19,6 +19,14 @@ static inline size_t line_length(char *line)
 
 const int months[] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
 
+static inline size_t unix_days(int day, int month, int year)
+{
+        const int u_year = year - 1970;
+        int leap_years = month > 2 ? (u_year + 2) / 4 : (u_year + 1) / 4;
+
+        return day + months[month] + u_year * 365 + leap_years;
+}
+
 static inline struct date parse_csv_line(char *file, size_t place)
 {
         size_t length = line_length(file + place);
@@ -40,7 +48,7 @@ static inline struct date parse_csv_line(char *file, size_t place)
         );
         free(string);
 
-        date.day = day + months[month - 1] + year * 365;
+        date.day = unix_days(day, month, year);
 
         printf(
                 "%lu: %.2f, %lu, %.2f, %.2f, %.2f\n",
@@ -67,7 +75,7 @@ static inline struct date *parse_csv(
 
 struct date *csv_init(char *path)
 {
-        char *file = io_read_file(path);
+        const char *file = io_read_file(path);
 
         size_t line_count = 0;
         size_t length = 0;
