@@ -24,6 +24,13 @@ const int month_days[] = {
 
 static inline size_t unix_days(int day, int month, int year)
 {
+        errorif(
+                day < 0 || day > 31 ||
+                month < 1 || month > 12 ||
+                year < 1970,
+                "Invalid date"
+        );
+
         const int u_year = year - 1970;
         int leap_years = month > 2 ? (u_year + 2) / 4 : (u_year + 1) / 4;
 
