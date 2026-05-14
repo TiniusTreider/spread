@@ -28,8 +28,6 @@ static inline struct date parse_csv_line(char *file, size_t place)
 
         struct date date = {};
 
-        printf("%s\n", string);
-
         int month, day, year;
 
         sscanf(
@@ -96,6 +94,7 @@ struct date *csv_init(char *path)
                 i++;
         }
 
+        printf("Date - Close - Volume - Open - High - Low - %s\n", path);
         struct date *dates = parse_csv(file, lines, line_count);
 
         io_clean_file(file);
