@@ -3,7 +3,7 @@
 
 #include "stack.h"
 
-struct stack *data;
+extern struct stack *data;
 
 void parse(void);
 void compare(void);
