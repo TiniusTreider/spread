@@ -1,4 +1,5 @@
 #include "csv.h"
+#include "error.h"
 #include "io.h"
 #include "memory.h"
 
@@ -33,11 +34,11 @@ const int months[12] = {
 
 static inline struct date parse_csv_line(char *file, size_t place)
 {
-        size_t length = line_length(file + place + 1);
+        size_t length = line_length(file + place);
 
         char *string = smalloc(length + 1);
         string[length] = '\0';
-        memcpy(string, file + place + 1, length);
+        memcpy(string, file + place, length);
 
         struct date date = {};
 
@@ -49,9 +50,12 @@ static inline struct date parse_csv_line(char *file, size_t place)
                 string,
                 "%d/%d/%d,$%f,%lu,$%f,$%f,$%f",
                 &month, &day, &year,
-                &date.close, &date.volume, &date.open, &date.high, &date.low
+                &date.close, &date.volume, &date.open,
+                &date.high, &date.low
         );
         free(string);
+
+        date.day = day + months[month - 1] + year * 365;
 
         printf(
                 "%lu, %f, %lu, %f, %f, %f\n",
@@ -59,8 +63,6 @@ static inline struct date parse_csv_line(char *file, size_t place)
                 date.close, date.volume, date.open,
                 date.high, date.low
         );
-
-        date.day = day + months[month - 1] + year * 365;
 
         return date;
 }
@@ -103,7 +105,7 @@ struct date *csv_init(char *path)
         while (file[i] != '\0')
         {
                 if (file[i] == '\n')
-                        lines[lines_fill++] = i;
+                        lines[lines_fill++] = i + 1;
 
                 i++;
         }
