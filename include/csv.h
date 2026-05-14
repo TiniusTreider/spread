@@ -5,10 +5,11 @@
 
 struct date {
         size_t day;
-        size_t close;
+        double close;
         size_t volume;
-        size_t open;
-        size_t high;
+        double open;
+        double high;
+        double low;
 };
 
 struct date *csv_init(char*);

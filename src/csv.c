@@ -16,9 +16,24 @@ static inline size_t line_length(char *line)
         return strlen(line);
 }
 
+const int months[12] = {
+        0,
+        31,
+        31 + 28,
+        31 + 28 + 31,
+        31 + 28 + 31 + 30,
+        31 + 28 + 31 + 30 + 31,
+        31 + 28 + 31 + 30 + 31 + 30,
+        31 + 28 + 31 + 30 + 31 + 30 + 31,
+        31 + 28 + 31 + 30 + 31 + 30 + 31 + 30,
+        31 + 28 + 31 + 30 + 31 + 30 + 31 + 30 + 31,
+        31 + 28 + 31 + 30 + 31 + 30 + 31 + 30 + 31 + 30,
+        31 + 28 + 31 + 30 + 31 + 30 + 31 + 30 + 31 + 30 + 31,
+};
+
 static inline struct date parse_csv_line(char *file, size_t place)
 {
-        size_t length = line_length(file + place);
+        size_t length = line_length(file + place + 1);
 
         char *string = smalloc(length + 1);
         string[length] = '\0';
@@ -27,6 +42,23 @@ static inline struct date parse_csv_line(char *file, size_t place)
         struct date date = {};
 
         printf("%s\n", string);
+
+        int month, day, year;
+
+        sscanf(
+                string,
+                "%d/%d/%d,$%lf,%lu,$%lf,$%lf,$%lf",
+                &month, &day, &year,
+                &date.close, &date.volume, &date.open, &date.high, &date.low
+        );
+        printf(
+                "%lu, %lf, %lu, %lf, %lf, %lf",
+                date.day,
+                date.close, date.volume, date.open,
+                date.high, date.low
+        );
+
+        date.day = months[month] + day + year * 365;
 
         return date;
 }
