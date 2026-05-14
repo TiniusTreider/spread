@@ -7,11 +7,11 @@
 struct stack {
         size_t size;
         size_t occupancy;
-        char *data;
+        struct date **data;
 };
 
-#define START_SIZE 256
-#define GROW_SIZE 256
+#define START_SIZE 8
+#define GROW_SIZE 4
 
 struct stack *s_init(void)
 {
@@ -30,7 +30,7 @@ void s_clean(struct stack *stack)
         free(stack);
 }
 
-char s_index(struct stack *stack, size_t index)
+struct date *s_index(struct stack *stack, size_t index)
 {
         return stack->data[index];
 }
@@ -41,7 +41,7 @@ static inline void s_grow(struct stack *stack)
         stack->data = srealloc(stack->data, stack->size);
 }
 
-void s_push(struct stack *stack, char c)
+void s_push(struct stack *stack, struct date *c)
 {
         stack->data[stack->occupancy] = c;
         stack->occupancy++;
