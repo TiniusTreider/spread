@@ -42,7 +42,7 @@ static inline struct date parse_csv_line(char *file, size_t place)
         date.day = day + months[month - 1] + year * 365;
 
         printf(
-                "%lu, %.2f, %lu, %.2f, %.2f, %.2f\n",
+                "%lu: %.2f, %lu, %.2f, %.2f, %.2f\n",
                 date.day,
                 date.close, date.volume, date.open,
                 date.high, date.low
