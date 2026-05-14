@@ -37,7 +37,7 @@ static inline struct date parse_csv_line(char *file, size_t place)
 
         char *string = smalloc(length + 1);
         string[length] = '\0';
-        memcpy(string, file + place, length);
+        memcpy(string, file + place + 1, length);
 
         struct date date = {};
 
@@ -51,8 +51,10 @@ static inline struct date parse_csv_line(char *file, size_t place)
                 &month, &day, &year,
                 &date.close, &date.volume, &date.open, &date.high, &date.low
         );
+        free(string);
+
         printf(
-                "%lu, %f, %lu, %f, %f, %f",
+                "%lu, %f, %lu, %f, %f, %f\n",
                 date.day,
                 date.close, date.volume, date.open,
                 date.high, date.low
