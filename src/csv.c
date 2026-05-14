@@ -1,4 +1,5 @@
 #include "csv.h"
+#include "error.h"
 #include "io.h"
 #include "memory.h"
 
@@ -27,6 +28,8 @@ static inline size_t unix_days(int day, int month, int year)
         return day + months[month] + u_year * 365 + leap_years;
 }
 
+#define PARSE_FAIL "Failed to parse line"
+
 static inline struct date parse_csv_line(char *file, size_t place)
 {
         size_t length = line_length(file + place);
@@ -39,12 +42,15 @@ static inline struct date parse_csv_line(char *file, size_t place)
 
         int month, day, year;
 
-        sscanf(
-                string,
-                "%d/%d/%d,$%f,%lu,$%f,$%f,$%f",
-                &month, &day, &year,
-                &date.close, &date.volume, &date.open,
-                &date.high, &date.low
+        errorif(
+                sscanf(
+                        string,
+                        "%d/%d/%d,$%f,%lu,$%f,$%f,$%f",
+                        &month, &day, &year,
+                        &date.close, &date.volume, &date.open,
+                        &date.high, &date.low
+                ) != 8,
+                PARSE_FAIL
         );
         free(string);
 
