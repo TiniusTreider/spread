@@ -6,9 +6,27 @@
 #include <stddef.h>
 #include <stdio.h>
 
+struct range {
+        size_t low;
+        size_t high;
+};
+
+static inline struct range range(struct csv a, struct csv b)
+{
+        (void)a;
+        (void)b;
+        return (struct range){ .low = 1, .high = 0 };
+}
+
 static inline void compare_stocks(struct csv a, struct csv b)
 {
         printf("Comparing %s - %s ...\n", a.ticker, b.ticker);
+
+        struct range overlap = range(a, b);
+        if (overlap.low > overlap.high) {
+                printf("Stocks share no dates\n");
+                return;
+        }
 }
 
 void compare(void)

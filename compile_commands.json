@@ -55,5 +55,100 @@
     ],
     "directory": "/home/tinius/cp/spread",
     "output": "build/error.o"
+  },
+  {
+    "file": "src/io.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-Iinclude",
+      "-march=native",
+      "-flto",
+      "-std=c11",
+      "-c",
+      "src/io.c",
+      "-o",
+      "build/io.o"
+    ],
+    "directory": "/home/tinius/cp/spread",
+    "output": "build/io.o"
+  },
+  {
+    "file": "src/main.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-Iinclude",
+      "-march=native",
+      "-flto",
+      "-std=c11",
+      "-c",
+      "src/main.c",
+      "-o",
+      "build/main.o"
+    ],
+    "directory": "/home/tinius/cp/spread",
+    "output": "build/main.o"
+  },
+  {
+    "file": "src/memory.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-Iinclude",
+      "-march=native",
+      "-flto",
+      "-std=c11",
+      "-c",
+      "src/memory.c",
+      "-o",
+      "build/memory.o"
+    ],
+    "directory": "/home/tinius/cp/spread",
+    "output": "build/memory.o"
+  },
+  {
+    "file": "src/parse.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-Iinclude",
+      "-march=native",
+      "-flto",
+      "-std=c11",
+      "-c",
+      "src/parse.c",
+      "-o",
+      "build/parse.o"
+    ],
+    "directory": "/home/tinius/cp/spread",
+    "output": "build/parse.o"
+  },
+  {
+    "file": "src/stack.c",
+    "arguments": [
+      "/usr/bin/gcc",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-Iinclude",
+      "-march=native",
+      "-flto",
+      "-std=c11",
+      "-c",
+      "src/stack.c",
+      "-o",
+      "build/stack.o"
+    ],
+    "directory": "/home/tinius/cp/spread",
+    "output": "build/stack.o"
   }
 ]
