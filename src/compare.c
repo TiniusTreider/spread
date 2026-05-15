@@ -4,10 +4,14 @@
 
 #include <stddef.h>
 
+static inline size_t range(struct csv a, struct csv b)
+{
+        /* TODO: find the range of days both sets have (bin search) */
+}
+
 static inline void compare_stocks(struct csv a, struct csv b)
 {
-        (void)a;
-        (void)b;
+        size_t length = range(a, b)
 }
 
 void compare(void)

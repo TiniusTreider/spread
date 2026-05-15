@@ -6,10 +6,6 @@
 struct date {
         size_t day;
         float close;
-        size_t volume;
-        float open;
-        float high;
-        float low;
 };
 
 struct csv {

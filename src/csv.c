@@ -54,10 +54,9 @@ static inline struct date parse_csv_line(char *file, size_t place)
         errorif(
                 sscanf(
                         string,
-                        "%d/%d/%d,$%f,%lu,$%f,$%f,$%f",
-                        &month, &day, &year,
-                        &date.close, &date.volume, &date.open,
-                        &date.high, &date.low
+                        "%d/%d/%d,%f,%s",
+                        &month, &day, &year, &date.close,
+                        NULL
                 ) != 8,
                 PARSE_FAIL
         );
@@ -66,10 +65,9 @@ static inline struct date parse_csv_line(char *file, size_t place)
         date.day = unix_days(day, month, year);
 
         printf(
-                "%lu: %.2f, %lu, %.2f, %.2f, %.2f\n",
+                "%lu: %.2f",
                 date.day,
-                date.close, date.volume, date.open,
-                date.high, date.low
+                date.close
         );
 
         return date;
@@ -118,7 +116,7 @@ struct csv csv_init(char *path)
                 i++;
         }
 
-        printf("Date - Close - Volume - Open - High - Low - %s\n", path);
+        printf("Date - Close - %s\n", path);
         struct date *dates = parse_csv(file, lines, line_count);
 
         free(lines);
