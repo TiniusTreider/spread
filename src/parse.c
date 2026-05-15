@@ -21,7 +21,7 @@ static inline void push_stock(struct stack *stack, char *name)
 
         printf("reading \"%s\"...\n", string);
 
-        s_push(stack, csv_init(string).dates);
+        s_push(stack, csv_init(string));
 
         free(string);
 }
@@ -43,11 +43,5 @@ void parse(void)
                         push_stock(stocks, entry->d_name);
         }
         closedir(dir);
-
-        for (size_t i = 0; i < s_size(stocks); i++)
-        {
-                csv_clean(s_index(stocks, i));
-        }
-        s_clean(stocks);
 }
 

@@ -7,8 +7,8 @@ struct stack;
 
 struct stack *s_init(void);
 void s_clean(struct stack*);
-struct date *s_index(struct stack*, size_t);
-void s_push(struct stack*, struct date*);
+struct csv s_index(struct stack*, size_t);
+void s_push(struct stack*, struct csv);
 size_t s_size(struct stack*);
 
 #endif

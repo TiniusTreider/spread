@@ -18,7 +18,7 @@ struct csv {
 };
 
 struct csv csv_init(char*);
-void csv_clean(struct date*);
+void csv_clean(struct csv);
 
 #endif
 

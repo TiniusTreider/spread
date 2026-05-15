@@ -5,9 +5,12 @@ sources = $(wildcard src/*)
 objects = $(patsubst src/%.c,build/%.o,$(sources))
 executable = spread
 
-.PHONY: all
+.PHONY: all debug
 
 all: $(executable)
+
+debug: CFLAGS = -Wall -Wextra -g -Iinclude -std=c11
+debug: clean $(executable)
 
 $(executable): $(objects)
 	$(CC) $(CFLAGS) $^ -o $@

@@ -128,8 +128,8 @@ struct csv csv_init(char *path)
         return (struct csv){ .dates = dates, .size = line_count };
 }
 
-void csv_clean(struct date *dates)
+void csv_clean(struct csv csv)
 {
-        free(dates);
+        free(csv.dates);
 }
 

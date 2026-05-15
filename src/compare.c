@@ -4,9 +4,8 @@
 
 #include <stddef.h>
 
-static inline void compare_stocks(struct date *a, struct date *b)
+static inline void compare_stocks(struct csv a, struct csv b)
 {
-        printf("comparing ")
         (void)a;
         (void)b;
 }
@@ -20,5 +19,7 @@ void compare(void)
                         compare_stocks(s_index(stocks, a), s_index(stocks, b));
                 }
         }
+
+        s_clean(stocks);
 }
 
