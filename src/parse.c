@@ -9,8 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PATH "scraper/"
-
 static inline void push_stock(struct stack *stack, char *name)
 {
         size_t length = strlen(name);

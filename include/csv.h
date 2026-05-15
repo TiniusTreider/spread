@@ -11,6 +11,7 @@ struct date {
 struct csv {
         struct date *dates;
         size_t size;
+        char *ticker;
 };
 
 struct csv csv_init(char*);

@@ -3,6 +3,8 @@
 
 #include "stack.h"
 
+#define PATH "scraper/"
+
 extern struct stack *stocks;
 
 void parse(void);

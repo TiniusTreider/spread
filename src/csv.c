@@ -1,8 +1,10 @@
+#include "control.h"
 #include "csv.h"
 #include "error.h"
 #include "io.h"
 #include "memory.h"
 
+#include <ctype.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -79,6 +81,26 @@ static inline struct date *parse_csv(
         return dates;
 }
 
+static inline void strupr(char *string)
+{
+        for (size_t i = 0; string[i] != '\0'; i++)
+        {
+                string[i] = toupper((string[i]));
+        }
+}
+
+static inline char *ticker(char *path)
+{
+        size_t length = strlen(path) - sizeof(PATH) - 3;
+        char *string = malloc(length + 1);
+        string[length] = '\0';
+        memcpy(string, path + sizeof(PATH) - 1, length);
+
+        strupr(string);
+
+        return string;
+}
+
 struct csv csv_init(char *path)
 {
         char *file = io_read_file(path);
@@ -112,11 +134,16 @@ struct csv csv_init(char *path)
 
         io_clean_file(file);
 
-        return (struct csv){ .dates = dates, .size = line_count };
+        return (struct csv){
+                .dates = dates,
+                .size = line_count,
+                .ticker = ticker(path)
+        };
 }
 
 void csv_clean(struct csv csv)
 {
         free(csv.dates);
+        free(csv.ticker);
 }
 

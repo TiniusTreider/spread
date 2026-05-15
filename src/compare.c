@@ -8,6 +8,7 @@
 
 static inline void compare_stocks(struct csv a, struct csv b)
 {
+        printf("Comparing %s - %s ...\n", a.ticker, b.ticker);
 }
 
 void compare(void)
@@ -16,7 +17,7 @@ void compare(void)
         {
                 for (size_t b = a + 1; b < s_size(stocks); b++)
                 {
-                        //compare_stocks(s_index(stocks, a), s_index(stocks, b));
+                        compare_stocks(s_index(stocks, a), s_index(stocks, b));
                 }
         }
 
