@@ -88,7 +88,7 @@ static inline struct date *parse_csv(
         return dates;
 }
 
-struct date *csv_init(char *path)
+struct csv csv_init(char *path)
 {
         char *file = io_read_file(path);
 
@@ -121,9 +121,11 @@ struct date *csv_init(char *path)
         printf("Date - Close - Volume - Open - High - Low - %s\n", path);
         struct date *dates = parse_csv(file, lines, line_count);
 
+        free(lines);
+
         io_clean_file(file);
 
-        return dates;
+        return (struct csv){ .dates = dates, .size = line_count };
 }
 
 void csv_clean(struct date *dates)

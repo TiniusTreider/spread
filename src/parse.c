@@ -21,15 +21,17 @@ static inline void push_stock(struct stack *stack, char *name)
 
         printf("reading \"%s\"...\n", string);
 
-        s_push(stack, csv_init(string));
+        s_push(stack, csv_init(string).dates);
 
         free(string);
 }
 
+struct stack *stocks;
+
 void parse(void)
 {
         DIR *dir = opendir(PATH);
-        struct stack *stocks = s_init();
+        stocks = s_init();
 
         struct dirent *entry;
         while ((entry = readdir(dir)) != NULL)

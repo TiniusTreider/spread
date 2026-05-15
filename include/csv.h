@@ -12,7 +12,12 @@ struct date {
         float low;
 };
 
-struct date *csv_init(char*);
+struct csv {
+        struct date *dates;
+        size_t size;
+};
+
+struct csv csv_init(char*);
 void csv_clean(struct date*);
 
 #endif
