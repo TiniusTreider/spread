@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PATH "/home/tinius/scraper/"
+#define PATH "scraper/"
 
 static inline void push_stock(struct stack *stack, char *name)
 {

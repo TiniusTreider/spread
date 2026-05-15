@@ -1,4 +1,0 @@
-# spread
-
-idrk man
-
