@@ -52,3 +52,8 @@ void s_push(struct stack *stack, struct date *c)
                 s_grow(stack);
 }
 
+size_t s_size(struct stack *stack)
+{
+        return stack->occupancy;
+}
+
