@@ -54,21 +54,14 @@ static inline struct date parse_csv_line(char *file, size_t place)
         errorif(
                 sscanf(
                         string,
-                        "%d/%d/%d,%f,%s",
-                        &month, &day, &year, &date.close,
-                        NULL
-                ) != 8,
+                        "%d/%d/%d,%f,%*s",
+                        &month, &day, &year, &date.close
+                ) != 4,
                 PARSE_FAIL
         );
         free(string);
 
         date.day = unix_days(day, month, year);
-
-        printf(
-                "%lu: %.2f",
-                date.day,
-                date.close
-        );
 
         return date;
 }
@@ -99,11 +92,7 @@ struct csv csv_init(char *path)
 
                 length++;
         }
-        printf(
-            "path: %s\n"
-            "dates: %lu\n",
-            path, line_count
-        );
+        printf("dates: %lu\n", line_count);
 
         size_t *lines = smalloc(line_count * sizeof(size_t));
         size_t lines_fill = 0;

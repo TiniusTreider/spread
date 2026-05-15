@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PATH "/home/tinius/stocks/"
+#define PATH "/home/tinius/scraper/"
 
 static inline void push_stock(struct stack *stack, char *name)
 {
@@ -38,7 +38,8 @@ void parse(void)
         {
                 if (
                         strcmp(entry->d_name, ".") != 0 &&
-                        strcmp(entry->d_name, "..") != 0
+                        strcmp(entry->d_name, "..") != 0 &&
+                        strcmp(entry->d_name, "sc.py") != 0
                 )
                         push_stock(stocks, entry->d_name);
         }

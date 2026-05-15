@@ -11,7 +11,7 @@ static inline size_t range(struct csv a, struct csv b)
 
 static inline void compare_stocks(struct csv a, struct csv b)
 {
-        size_t length = range(a, b)
+        size_t length = range(a, b);
 }
 
 void compare(void)
