@@ -9,7 +9,7 @@ executable = spread
 
 all: $(executable)
 
-debug: CFLAGS = -Wall -Wextra -g -Iinclude -std=c11
+debug: CFLAGS = -Wall -Wextra -g -Iinclude -lm -std=c11
 debug: clean $(executable)
 
 $(executable): $(objects)
