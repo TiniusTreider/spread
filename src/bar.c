@@ -1,6 +1,8 @@
 #include "bar.h"
 #include "memory.h"
+#include "util.h"
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,36 +13,77 @@ struct bar {
         char *goal;
 };
 
-#define BAR_WIDTH 48
 #define GOAL_WIDTH 16
-#define NUM_WIDTH 16
+#define BAR_WIDTH 40
+#define NUM_WIDTH 24
 
-void print_bar(struct bar *bar, char *message)
+#define BAR_CHAR '='
+#define BAR_ROOF '_'
+
+#define STRING_H(A) #A
+#define STRING(A) STRING_H(A)
+
+struct bar *b_init(size_t max)
 {
-        size_t fill = BAR_WIDTH * (bar->curr / bar->max);
-        int percentage = 100 * (bar->curr / bar->max);
+        struct bar *bar = smalloc(sizeof(struct bar));
+        bar->max = max;
+        bar->curr = 0;
+        bar->goal = smalloc(1);
+        bar->goal[0] = '\0';
 
-        char *string = smalloc(BAR_WIDTH + 1);
-        string[BAR_WIDTH] = '\0';
-
-        memset(string, ' ', GOAL_WIDTH);
-        snprintf(string, GOAL_WIDTH, "%s", bar->goal);
-        memset(string + GOAL_WIDTH, '#', fill);
-        memset(string + GOAL_WIDTH + fill, ' ', BAR_WIDTH - fill + NUM_WIDTH);
-        snprintf(
-                string + GOAL_WIDTH + BAR_WIDTH, NUM_WIDTH,
-                "%d%% - %lu/%lu",
-                percentage,
-                bar->curr, bar->max
-        );
-
-        printf("\r%s\n%s", message, string);
-        free(string);
+        return bar;
 }
 
-void new_goal(struct bar *bar, char *goal)
+void b_clean(struct bar *bar)
+{
+        free(bar->goal);
+        free(bar);
+}
+
+void printf_bar(struct bar *bar, char *message, ...)
+{
+        va_list args;
+        va_start(args, message);
+
+        printf("\r%*s\033[F%*s\r",
+                GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH, "",
+                GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH, ""
+        );
+        vprintf(message, args);
+        va_end(args);
+        printf("\n");
+
+        char roof[GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH + 1];
+        roof[GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH] = '\0';
+        memset(roof, BAR_ROOF, GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH);
+        printf("%s\n", roof);
+
+        printf("|%-*s", GOAL_WIDTH - 1, bar->goal);
+
+        size_t progress = MIN(
+                (BAR_WIDTH - 2) * bar->curr / bar->max,
+                BAR_WIDTH - 2
+        );
+        char string[BAR_WIDTH - 1];
+        string[progress] = '\0';
+
+        memset(string, BAR_CHAR, progress);
+        printf("|%-*s|", BAR_WIDTH - 2, string);
+
+        int precentage = MIN(100 * bar->curr / bar->max, 100);
+        printf(" %d%% - %lu/%lu", precentage, bar->curr, bar->max);
+        fflush(stdout);
+}
+
+void bar_new_goal(struct bar *bar, char *goal)
 {
         bar->curr++;
-        bar->goal = goal;
+
+        free(bar->goal);
+
+        size_t length = strlen(goal);
+        bar->goal = smalloc(length + 1);
+        bar->goal[length] = '\0';
+        memcpy(bar->goal, goal, length);
 }
 

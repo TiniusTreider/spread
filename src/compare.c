@@ -1,3 +1,4 @@
+#include "bar.h"
 #include "control.h"
 #include "csv.h"
 #include "memory.h"
@@ -9,6 +10,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define TRADE_SPEED 0.3
 
@@ -21,6 +23,24 @@ struct range {
         size_t low;
         size_t high;
 };
+
+#define GOAL_MIDDLE " - "
+
+static inline char *get_goal(struct csv a, struct csv b)
+{
+        size_t length =
+                strlen(a.ticker) +
+                strlen(b.ticker) +
+                sizeof(GOAL_MIDDLE);
+
+        char *string = smalloc(length);
+        string[length - 1] = '\0';
+
+        sprintf(string, "%s" GOAL_MIDDLE "%s", a.ticker, b.ticker);
+
+        return string;
+}
+
 
 static inline struct range date_overlap(struct csv a, struct csv b)
 {
@@ -134,9 +154,11 @@ struct pair {
         double rho;
 };
 
+struct bar *bar;
+
 static inline struct pair compare_stocks(struct csv a, struct csv b)
 {
-        printf("%s - %s ...\n", a.ticker, b.ticker);
+        printf_bar(bar, "%s - %s", a.ticker, b.ticker);
 
         struct range overlap = date_overlap(a, b);
         if (overlap.low > overlap.high)
@@ -163,7 +185,7 @@ static inline struct pair compare_stocks(struct csv a, struct csv b)
         const double mse = mean_square_error(spread, lr, length);
         const double rho = mean_reversion(spread, lr, length);
         free(spread);
-        printf("        MSE: %lf\n        Rho: %lf\n", mse, rho);
+        printf_bar(bar, "        MSE: %lf\n        Rho: %lf", mse, rho);
 
         return (struct pair){
                 .a = a.ticker, .b = b.ticker,
@@ -183,20 +205,27 @@ void compare(void)
                 sizeof(struct pair)
         );
 
+        bar = b_init(choose_two(s_size(stocks)) - 1);
+
         size_t i = 0;
         for (size_t a = 0; a < s_size(stocks); a++)
         {
                 for (size_t b = a + 1; b < s_size(stocks); b++)
                 {
-                        pairs[i] = compare_stocks(
-                                s_index(stocks, a),
-                                s_index(stocks, b)
-                        );
-                        i++;
+                        struct csv csv_a = s_index(stocks, a);
+                        struct csv csv_b = s_index(stocks, b);
+
+                        pairs[i++] = compare_stocks(csv_a, csv_b);
+
+                        char *string = get_goal(csv_a, csv_b);
+                        bar_new_goal(bar, string);
+                        free(string);
                 }
         }
 
+        b_clean(bar);
         print_pairs(pairs);
+
         free(pairs);
         s_clean(stocks);
 }
