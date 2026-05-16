@@ -130,7 +130,7 @@ struct csv csv_init(char *path)
         if (line_count < 2) {
                 printf("        Empty stock, skipping...");
                 return (struct csv){ .dates = NULL };
-        } else if (line_count < 356 * MIN_YEARS) {
+        } else if (line_count < 252 * MIN_YEARS) {
                 printf("        Short stock, skipping...");
                 return (struct csv){ .dates = NULL };
         }
