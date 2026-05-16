@@ -84,7 +84,7 @@ static inline struct date *get_spread(
         {
                 spread[i] = (struct date){
                         .day = a[i].day,
-                        .close = a[i].close / b[i].close
+                        .close = logf(a[i].close / b[i].close)
                 };
         }
 
@@ -110,7 +110,9 @@ static struct linear regression(struct date *spread, size_t length)
         for (size_t i = 0; i < length; i++)
         {
                 const double weight = fabs((double)i - (double)length / 2);
-                const double slope = (spread[i].close - mean_spread) / ((double)i - (double)length / 2);
+                const double slope =
+                        (spread[i].close - mean_spread) /
+                        ((double)i - (double)length / 2);
                 if (isinf(slope))
                         continue;
                 slope_sum += slope * weight * weight;
@@ -144,7 +146,19 @@ static inline double mean_reversion(
         (void)lr;
         (void)length;
 
-        return 0;
+        double lag_1_sum = 0;
+        double square_sum = 0;
+        for (size_t i = 0; i < length - 1; i++)
+        {
+                const double lag_1 =
+                        (i + 1) * lr.m + lr.b - spread[i + 1].close;
+                const double epsilon = i * lr.m + lr.b - spread[i].close;
+
+                lag_1_sum += lag_1 * epsilon;
+                square_sum += epsilon * epsilon;
+        }
+
+        return lag_1_sum / square_sum;
 }
 
 struct pair {
@@ -195,8 +209,8 @@ static inline struct pair compare_stocks(struct csv a, struct csv b)
 
 int compare_pairs(const void *a, const void *b)
 {
-        float x = 1 / ((struct pair*)a)->mse + ((struct pair*)a)->rho;
-        float y = 1 / ((struct pair*)b)->mse + ((struct pair*)b)->rho;
+        float x = 1 / ((struct pair*)a)->mse - ((struct pair*)a)->rho;
+        float y = 1 / ((struct pair*)b)->mse - ((struct pair*)b)->rho;
 
         return (x > y) - (x < y);
 }
@@ -207,8 +221,14 @@ static inline void print_pairs(struct pair *pairs, size_t size)
 
         for (size_t i = 0; i < size; i ++)
         {
+                if (size - i + 1 == 20)
+                        printf("\n"
+"==================================== TOP 20 ===================================="
+                        "\n\n");
+
                 printf(
-                        "%s - %s, mse: %lf, rho: %lf\n",
+                        "        %2lu.     %-5s - %-5s    mse: %lf, rho: %lf\n",
+                        size - i,
                         pairs[i].a, pairs[i].b,
                         pairs[i].mse, pairs[i].rho
                 );
