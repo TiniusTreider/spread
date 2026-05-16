@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define TRADE_SPEED 0.3
+
 struct range {
         size_t low;
         size_t high;
@@ -17,8 +19,6 @@ struct range {
 
 static inline struct range date_overlap(struct csv a, struct csv b)
 {
-        printf("        Calculating overlap...\n");
-
         struct range ra = (struct range){
                 .low = a.dates[0].day,
                 .high = a.dates[a.size - 1].day
@@ -35,8 +35,6 @@ static inline struct range date_overlap(struct csv a, struct csv b)
 
 static inline struct date *bin_search(struct csv csv, size_t day)
 {
-        printf("        Searching...\n");
-
         struct date *low = csv.dates;
         struct date *high = csv.dates + csv.size - 1;
 
@@ -56,8 +54,6 @@ static inline struct date *bin_search(struct csv csv, size_t day)
 static inline struct date *get_spread(
         struct date *a, struct date *b, size_t length
 ) {
-        printf("        Calculating spread...\n");
-
         struct date *spread = smalloc(length * sizeof(struct date));
         for (size_t i = 0; i < length; i++)
         {
@@ -77,8 +73,6 @@ struct linear {
 
 static struct linear regression(struct date *spread, size_t length)
 {
-        printf("        Calculating spread regression...\n");
-
         double spread_sum = 0;
         for (size_t i = 0; i < length; i++)
         {
@@ -106,12 +100,8 @@ static struct linear regression(struct date *spread, size_t length)
 }
 
 static inline double mean_square_error(
-        struct date *spread, size_t length
+        struct date *spread, const struct linear lr, size_t length
 ) {
-        printf("        Calculating MSE...\n");
-
-        const struct linear lr = regression(spread, length);
-
         double square_error_sum = 0;
         for (size_t i = 0; i < length; i++)
         {
@@ -123,11 +113,10 @@ static inline double mean_square_error(
 }
 
 static inline double mean_reversion(
-        struct date *spread, size_t length
+        struct date *spread, const struct linear lr, size_t length
 ) {
-        printf("        Calculating Rho...\n");
-
         (void)spread;
+        (void)lr;
         (void)length;
 
         return 0;
@@ -135,14 +124,11 @@ static inline double mean_reversion(
 
 static inline void compare_stocks(struct csv a, struct csv b)
 {
-        printf("Comparing %s - %s ...\n", a.ticker, b.ticker);
+        printf("%s - %s ...\n", a.ticker, b.ticker);
 
         struct range overlap = date_overlap(a, b);
-        if (overlap.low > overlap.high) {
-                printf("        Stocks share no dates\n");
+        if (overlap.low > overlap.high)
                 return;
-        }
-        printf("        Common history %lu - %lu\n", overlap.low, overlap.high);
 
         struct date *a_dates;
         struct date *b_dates;
@@ -161,8 +147,9 @@ static inline void compare_stocks(struct csv a, struct csv b)
 
         struct date *spread = get_spread(a_dates, b_dates, length);
 
-        const double mse = mean_square_error(spread, length);
-        const double rho = mean_reversion(spread, length);
+        const struct linear lr = regression(spread, length);
+        const double mse = mean_square_error(spread, lr, length);
+        const double rho = mean_reversion(spread, lr, length);
         printf("        MSE: %lf\n        Rho: %lf\n", mse, rho);
 
         free(spread);
