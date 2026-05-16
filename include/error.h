@@ -11,6 +11,9 @@
 #define ERROR_READ_FILE "Failed to read from file"
 #define ERROR_CLOSE_FILE "Failed to close file"
 
+#define ERROR_OPEN_DIR "Failed to open directory"
+#define ERROR_CLOSE_DIR "Failed to close directory"
+
 void error(const char*);
 void errorif(bool, const char*);
 void errorf(const char*, ...);

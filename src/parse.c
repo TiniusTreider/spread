@@ -23,13 +23,8 @@ static inline void push_stock(struct stack *stack, char *name)
         struct csv csv = csv_init(string);
         free(string);
 
-        if (csv.size != 0) {
-                s_push(stack, csv);
-                printf("        %s pushed\n", csv.ticker);
-        } else {
-                csv_clean(csv);
-                error("Stock empty");
-        }
+        s_push(stack, csv);
+        printf("        %s pushed\n", csv.ticker);
 }
 
 struct stack *stocks;
@@ -37,6 +32,7 @@ struct stack *stocks;
 void parse(void)
 {
         DIR *dir = opendir(PATH);
+        errorif(dir == NULL, ERROR_OPEN_DIR);
         stocks = s_init();
 
         struct dirent *entry;
@@ -49,6 +45,7 @@ void parse(void)
                 )
                         push_stock(stocks, entry->d_name);
         }
-        closedir(dir);
+
+        errorif(closedir(dir) != 0, ERROR_CLOSE_DIR);
 }
 

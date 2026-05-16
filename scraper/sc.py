@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from tqdm import tqdm
 
 TICKER_FILE = "../tickers.txt"
-YEARS = 10
+YEARS = 9
 
 def get_tickers():
     if not os.path.exists(TICKER_FILE):

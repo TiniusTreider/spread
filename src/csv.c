@@ -103,7 +103,7 @@ static inline void strupr(char *string)
 static inline char *ticker(char *path)
 {
         size_t length = strlen(path) - sizeof(PATH) - 3;
-        char *string = malloc(length + 1);
+        char *string = smalloc(length + 1);
         string[length] = '\0';
         memcpy(string, path + sizeof(PATH) - 1, length);
 
@@ -125,6 +125,7 @@ struct csv csv_init(char *path)
 
                 length++;
         }
+        errorif(line_count == 0, "Empty stock");
         printf("        Dates: %lu\n", line_count);
 
         size_t *lines = smalloc(line_count * sizeof(size_t));
