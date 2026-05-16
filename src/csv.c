@@ -125,7 +125,10 @@ struct csv csv_init(char *path)
 
                 length++;
         }
-        errorif(line_count == 0, "Empty stock");
+        if (line_count < 2) {
+                printf("        Empty stock, skipping...");
+                return (struct csv){ .dates = NULL };
+        }
         printf("        Dates: %lu\n", line_count);
 
         size_t *lines = smalloc(line_count * sizeof(size_t));

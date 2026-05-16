@@ -11,8 +11,8 @@ struct stack {
         struct csv *data;
 };
 
-#define START_SIZE 8
-#define GROW_SIZE 4
+#define START_SIZE 256
+#define GROW_SIZE 256
 
 struct stack *s_init(void)
 {

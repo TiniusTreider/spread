@@ -28,6 +28,26 @@ static inline struct range date_overlap(struct csv a, struct csv b)
         };
 }
 
+static inline struct date *bin_search(struct csv csv, size_t day)
+{
+        printf("        Searching...\n");
+
+        struct date *low = csv.dates;
+        struct date *high = csv.dates + csv.size - 1;
+
+        while (high - low > 1)
+        {
+                struct date *middle = low + (high - low) / 2;
+                if (middle->day > day) {
+                        high = middle;
+                } else {
+                        low = middle;
+                }
+        }
+
+        return low;
+}
+
 static inline void compare_stocks(struct csv a, struct csv b)
 {
         printf("Comparing %s - %s ...\n", a.ticker, b.ticker);
@@ -37,7 +57,22 @@ static inline void compare_stocks(struct csv a, struct csv b)
                 printf("        Stocks share no dates\n");
                 return;
         }
+        size_t length = overlap.high - overlap.low;
         printf("        Common history %lu - %lu\n", overlap.low, overlap.high);
+
+        struct date *a_dates;
+        struct date *b_dates;
+
+        if (overlap.low == a.dates[0].day)
+        {
+                a_dates = a.dates;
+                b_dates = bin_search(b, overlap.low);
+        } else {
+                b_dates = b.dates;
+                a_dates = bin_search(a, overlap.low);
+        }
+
+
 }
 
 void compare(void)

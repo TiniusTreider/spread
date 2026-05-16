@@ -23,8 +23,10 @@ static inline void push_stock(struct stack *stack, char *name)
         struct csv csv = csv_init(string);
         free(string);
 
-        s_push(stack, csv);
-        printf("        %s pushed\n", csv.ticker);
+        if (csv.dates != NULL) {
+                s_push(stack, csv);
+                printf("        %s pushed\n", csv.ticker);
+        }
 }
 
 struct stack *stocks;
