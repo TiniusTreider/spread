@@ -228,11 +228,11 @@ static inline void print_pairs(struct pair *pairs, size_t size)
                         pairs[i].mse, pairs[i].rho
                 );
 
-                if (size - i + 1 == 20)
+                if (size - i - 1 == 20)
                         printf("\n"
 "==================================== TOP 20 ===================================="
                         "\n\n");
-                else if (size - i + 1 == 3)
+                else if (size - i - 1 == 3)
                         printf("\n");
         }
 }
