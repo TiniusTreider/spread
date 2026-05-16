@@ -30,14 +30,14 @@ static inline struct range date_overlap(struct csv a, struct csv b)
 
 static inline void compare_stocks(struct csv a, struct csv b)
 {
-        printf("        Comparing %s - %s ...\n", a.ticker, b.ticker);
+        printf("Comparing %s - %s ...\n", a.ticker, b.ticker);
 
         struct range overlap = date_overlap(a, b);
         if (overlap.low > overlap.high) {
-                printf("Stocks share no dates\n");
+                printf("        Stocks share no dates\n");
                 return;
         }
-        printf("Common history %lu - %lu\n", overlap.low, overlap.high);
+        printf("        Common history %lu - %lu\n", overlap.low, overlap.high);
 }
 
 void compare(void)

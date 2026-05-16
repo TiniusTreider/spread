@@ -86,7 +86,7 @@ static inline struct date *parse_csv(
                 dates[i] = parse_csv_line(file, lines[i]);
         }
 
-        printf("Sorting...");
+        printf("        Sorting...\n");
         qsort(dates, line_count - 1, sizeof(struct date), compare_dates);
 
         return dates;
@@ -138,7 +138,6 @@ struct csv csv_init(char *path)
                 i++;
         }
 
-        printf("Date - Close - %s\n", path);
         struct date *dates = parse_csv(file, lines, line_count);
 
         free(lines);
