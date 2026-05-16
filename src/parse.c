@@ -20,7 +20,7 @@ static inline void push_stock(struct stack *stack, char *name)
 
         printf("Reading \"%s\"...\n", string);
 
-        struct csv csv = csv_init(string);
+        const struct csv csv = csv_init(string);
         free(string);
 
         if (csv.dates != NULL) {
