@@ -111,7 +111,7 @@ static struct linear regression(struct date *spread, size_t length)
         {
                 const double weight = fabs((double)i - (double)length / 2);
                 const double slope = (spread[i].close - mean_spread) / ((double)i - (double)length / 2);
-                if (!isnormal(slope))
+                if (isinf(slope))
                         continue;
                 slope_sum += slope * weight * weight;
                 weight_sum += weight;
@@ -193,19 +193,34 @@ static inline struct pair compare_stocks(struct csv a, struct csv b)
         };
 }
 
-static inline void print_pairs(struct pair *pairs)
+int compare_pairs(const void *a, const void *b)
 {
-        (void)pairs;
+        float x = 1 / ((struct pair*)a)->mse + ((struct pair*)a)->rho;
+        float y = 1 / ((struct pair*)b)->mse + ((struct pair*)b)->rho;
+
+        return (x > y) - (x < y);
+}
+
+static inline void print_pairs(struct pair *pairs, size_t size)
+{
+        qsort(pairs, size, sizeof(struct pair), compare_pairs);
+
+        for (size_t i = 0; i < size; i ++)
+        {
+                printf(
+                        "%s - %s, mse: %lf, rho: %lf\n",
+                        pairs[i].a, pairs[i].b,
+                        pairs[i].mse, pairs[i].rho
+                );
+        }
 }
 
 void compare(void)
 {
-        struct pair *pairs = smalloc(
-                choose_two(s_size(stocks)) *
-                sizeof(struct pair)
-        );
+        size_t pair_count = choose_two(s_size(stocks));
+        struct pair *pairs = smalloc(pair_count * sizeof(struct pair));
 
-        bar = b_init(choose_two(s_size(stocks)) - 1);
+        bar = b_init(pair_count - 1);
 
         size_t i = 0;
         for (size_t a = 0; a < s_size(stocks); a++)
@@ -224,7 +239,7 @@ void compare(void)
         }
 
         b_clean(bar);
-        print_pairs(pairs);
+        print_pairs(pairs, pair_count);
 
         free(pairs);
         s_clean(stocks);

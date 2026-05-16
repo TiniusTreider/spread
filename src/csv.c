@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MIN_YEARS 4
+
 static inline size_t line_length(char *line)
 {
         char *c;
@@ -127,6 +129,9 @@ struct csv csv_init(char *path)
         }
         if (line_count < 2) {
                 printf("        Empty stock, skipping...");
+                return (struct csv){ .dates = NULL };
+        } else if (line_count < 356 * MIN_YEARS) {
+                printf("        Short stock, skipping...");
                 return (struct csv){ .dates = NULL };
         }
         printf("        Dates: %lu\n", line_count);
