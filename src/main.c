@@ -7,6 +7,8 @@ int main(void)
         parse();
         compare();
 
+        printf("\n");
+
         return 0;
 }
 

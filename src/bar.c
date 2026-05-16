@@ -71,7 +71,12 @@ void printf_bar(struct bar *bar, char *message, ...)
         printf("|%-*s|", BAR_WIDTH - 2, string);
 
         int precentage = MIN(100 * bar->curr / bar->max, 100);
-        printf(" %d%% - %lu/%lu", precentage, bar->curr, bar->max);
+        printf(
+                " %d%% - %lu/%lu\033[%dG|",
+                precentage,
+                bar->curr, bar->max,
+                GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH
+        );
         fflush(stdout);
 }
 
