@@ -12,8 +12,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TRADE_SPEED 0.3
-
 static inline size_t choose_two(size_t x)
 {
         return x * (x - 1) / 2;
@@ -139,6 +137,8 @@ static inline double mean_square_error(
         return square_error_sum / length;
 }
 
+#define LAG 10
+
 static inline double mean_reversion(
         struct date *spread, const struct linear lr, size_t length
 ) {
@@ -146,19 +146,19 @@ static inline double mean_reversion(
         (void)lr;
         (void)length;
 
-        double lag_1_sum = 0;
+        double lag_sum = 0;
         double square_sum = 0;
-        for (size_t i = 0; i < length - 1; i++)
+        for (size_t i = 0; i < length - LAG; i++)
         {
-                const double lag_1 =
-                        (i + 1) * lr.m + lr.b - spread[i + 1].close;
+                const double lag =
+                        (i + LAG) * lr.m + lr.b - spread[i + LAG].close;
                 const double epsilon = i * lr.m + lr.b - spread[i].close;
 
-                lag_1_sum += lag_1 * epsilon;
+                lag_sum += lag * epsilon;
                 square_sum += epsilon * epsilon;
         }
 
-        return lag_1_sum / square_sum;
+        return lag_sum / square_sum;
 }
 
 struct pair {
