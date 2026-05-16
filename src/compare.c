@@ -4,6 +4,7 @@
 #include "stack.h"
 #include "util.h"
 
+#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -86,11 +87,17 @@ static struct linear regression(struct date *spread, size_t length)
         const double mean_spread = spread_sum / length;
 
         double slope_sum = 0;
+        double weight_sum = 0;
         for (size_t i = 0; i < length; i++)
         {
-                slope_sum += (spread[i].close - mean_spread) / ((double)i - (double)length / 2);
+                const double weight = fabs((double)i - (double)length / 2);
+                const double slope = (spread[i].close - mean_spread) / ((double)i - (double)length / 2);
+                if (!isnormal(slope))
+                        continue;
+                slope_sum += slope * weight * weight;
+                weight_sum += weight;
         }
-        const double mean_slope = slope_sum / length;
+        const double mean_slope = slope_sum / weight_sum;
 
         return (struct linear){
                 .m = mean_slope,
