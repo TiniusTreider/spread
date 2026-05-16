@@ -12,6 +12,11 @@
 
 #define TRADE_SPEED 0.3
 
+static inline size_t choose_two(size_t x)
+{
+        return x * (x - 1) / 2;
+}
+
 struct range {
         size_t low;
         size_t high;
@@ -122,13 +127,20 @@ static inline double mean_reversion(
         return 0;
 }
 
-static inline void compare_stocks(struct csv a, struct csv b)
+struct pair {
+        char *a;
+        char *b;
+        double mse;
+        double rho;
+};
+
+static inline struct pair compare_stocks(struct csv a, struct csv b)
 {
         printf("%s - %s ...\n", a.ticker, b.ticker);
 
         struct range overlap = date_overlap(a, b);
         if (overlap.low > overlap.high)
-                return;
+                return (struct pair){};
 
         struct date *a_dates;
         struct date *b_dates;
@@ -150,21 +162,42 @@ static inline void compare_stocks(struct csv a, struct csv b)
         const struct linear lr = regression(spread, length);
         const double mse = mean_square_error(spread, lr, length);
         const double rho = mean_reversion(spread, lr, length);
+        free(spread);
         printf("        MSE: %lf\n        Rho: %lf\n", mse, rho);
 
-        free(spread);
+        return (struct pair){
+                .a = a.ticker, .b = b.ticker,
+                .mse = mse, .rho = rho
+        };
+}
+
+static inline void print_pairs(struct pair *pairs)
+{
+        (void)pairs;
 }
 
 void compare(void)
 {
+        struct pair *pairs = smalloc(
+                choose_two(s_size(stocks)) *
+                sizeof(struct pair)
+        );
+
+        size_t i = 0;
         for (size_t a = 0; a < s_size(stocks); a++)
         {
                 for (size_t b = a + 1; b < s_size(stocks); b++)
                 {
-                        compare_stocks(s_index(stocks, a), s_index(stocks, b));
+                        pairs[i] = compare_stocks(
+                                s_index(stocks, a),
+                                s_index(stocks, b)
+                        );
+                        i++;
                 }
         }
 
+        print_pairs(pairs);
+        free(pairs);
         s_clean(stocks);
 }
 
