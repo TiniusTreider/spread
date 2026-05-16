@@ -221,17 +221,19 @@ static inline void print_pairs(struct pair *pairs, size_t size)
 
         for (size_t i = 0; i < size; i ++)
         {
-                if (size - i + 1 == 20)
-                        printf("\n"
-"==================================== TOP 20 ===================================="
-                        "\n\n");
-
                 printf(
                         "        %2lu.     %-5s - %-5s    mse: %lf, rho: %lf\n",
                         size - i,
                         pairs[i].a, pairs[i].b,
                         pairs[i].mse, pairs[i].rho
                 );
+
+                if (size - i + 1 == 20)
+                        printf("\n"
+"==================================== TOP 20 ===================================="
+                        "\n\n");
+                else if (size - i + 1 == 3)
+                        printf("\n");
         }
 }
 
