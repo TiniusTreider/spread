@@ -1,5 +1,6 @@
 #include "control.h"
 #include "csv.h"
+#include "error.h"
 #include "memory.h"
 #include "stack.h"
 
@@ -17,11 +18,18 @@ static inline void push_stock(struct stack *stack, char *name)
         memcpy(string, PATH, sizeof(PATH));
         strcat(string, name);
 
-        printf("reading \"%s\"...\n", string);
+        printf("Reading \"%s\"...\n", string);
 
-        s_push(stack, csv_init(string));
-
+        struct csv csv = csv_init(string);
         free(string);
+
+        if (csv.size != 0) {
+                s_push(stack, csv);
+                printf("        %s pushed\n", csv.ticker);
+        } else {
+                csv_clean(csv);
+                error("Stock empty");
+        }
 }
 
 struct stack *stocks;

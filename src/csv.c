@@ -68,6 +68,14 @@ static inline struct date parse_csv_line(char *file, size_t place)
         return date;
 }
 
+int compare_dates(const void *a, const void *b)
+{
+        const int x = (*(const struct date*)a).day;
+        const int y = (*(const struct date*)b).day;
+
+        return (x > y) - (x < y);
+}
+
 static inline struct date *parse_csv(
     char *file, size_t *lines, size_t line_count
 ) {
@@ -77,6 +85,9 @@ static inline struct date *parse_csv(
         {
                 dates[i] = parse_csv_line(file, lines[i]);
         }
+
+        printf("Sorting...");
+        qsort(dates, line_count - 1, sizeof(struct date), compare_dates);
 
         return dates;
 }
@@ -114,7 +125,7 @@ struct csv csv_init(char *path)
 
                 length++;
         }
-        printf("dates: %lu\n", line_count);
+        printf("        Dates: %lu\n", line_count);
 
         size_t *lines = smalloc(line_count * sizeof(size_t));
         size_t lines_fill = 0;
@@ -136,7 +147,7 @@ struct csv csv_init(char *path)
 
         return (struct csv){
                 .dates = dates,
-                .size = line_count,
+                .size = line_count - 1,
                 .ticker = ticker(path)
         };
 }

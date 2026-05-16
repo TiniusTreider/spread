@@ -28,7 +28,7 @@ tickers = get_tickers()
 
 if tickers:
     today = datetime.now()
-    start_date_obj = today - timedelta(days=730) # 2 years
+    start_date_obj = today - timedelta(days=3650) # 2 years
     todate = today.strftime("%Y-%m-%d")
     fromdate = start_date_obj.strftime("%Y-%m-%d")
 
