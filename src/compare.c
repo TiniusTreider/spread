@@ -244,11 +244,11 @@ static inline void print_pairs(struct pair *pairs, size_t size)
         FILE *file = fopen(WRITE_FILE, "w");
         errorif(file == NULL, ERROR_OPEN_FILE);
 
-        fprintf(file, "A B MSE Rho");
-        for (int i = size - 1; i > 0; i--)
+        fprintf(file, "A B MSE Rho\n");
+        for (int i = size - 1; i >= 0; i--)
         {
                 fprintf(
-                        file, "%s %s %lf %lf",
+                        file, "%s %s %lf %lf\n",
                         pairs[i].a, pairs[i].b,
                         pairs[i].mse, pairs[i].rho
                 );
