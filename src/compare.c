@@ -1,6 +1,7 @@
 #include "bar.h"
 #include "control.h"
 #include "csv.h"
+#include "error.h"
 #include "memory.h"
 #include "stack.h"
 #include "util.h"
@@ -215,6 +216,8 @@ int compare_pairs(const void *a, const void *b)
         return (x > y) - (x < y);
 }
 
+#define WRITE_FILE "output.txt"
+
 static inline void print_pairs(struct pair *pairs, size_t size)
 {
         qsort(pairs, size, sizeof(struct pair), compare_pairs);
@@ -229,14 +232,29 @@ static inline void print_pairs(struct pair *pairs, size_t size)
                 );
 
                 if (size - i - 1 == 20)
-                        printf("\n"
-"==================================== TOP 20 ===================================="
-                        "\n\n");
+                        printf("\n="
+"=================================== TOP 20 ==================================="
+                        "=\n\n");
                 else if (size - i - 1 == 10)
                         printf("\n");
                 else if (size - i - 1 == 3)
                         printf("\n");
         }
+
+        FILE *file = fopen(WRITE_FILE, "w");
+        errorif(file == NULL, ERROR_OPEN_FILE);
+
+        fprintf(file, "A B MSE Rho");
+        for (int i = size - 1; i > 0; i--)
+        {
+                fprintf(
+                        file, "%s %s %lf %lf",
+                        pairs[i].a, pairs[i].b,
+                        pairs[i].mse, pairs[i].rho
+                );
+        }
+
+        errorif(fclose(file) != 0, ERROR_CLOSE_FILE);
 }
 
 void compare(void)
