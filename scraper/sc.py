@@ -32,10 +32,19 @@ if tickers:
 
     session = requests.Session()
 
-    pbar = tqdm(tickers, desc="Scraping Nasdaq", unit="ticker")
+    pbar = tqdm(tickers, desc="Scraping Historical Data", unit="item")
 
-    for ticker in pbar:
-        pbar.set_description(f"Fetching {ticker}")
+    for item in pbar:
+        # Parse the TICKER:EXCHANGE format
+        if ":" in item:
+            ticker, exchange = item.split(":", 1)
+            ticker = ticker.strip()
+            exchange = exchange.strip()
+        else:
+            ticker = item.strip()
+            exchange = "NASDAQ"  # Default fallback if exchange is omitted
+
+        pbar.set_description(f"Fetching {ticker} ({exchange})")
 
         session.headers.update({
             'Accept': 'application/json, text/plain, */*',
@@ -61,21 +70,22 @@ if tickers:
                             if col in df.columns:
                                 df[col] = df[col].replace(r'[\$,]', '', regex=True).astype(float)
 
+                        # Saves file as ticker.csv (e.g., aapl.csv, f.csv)
                         df.to_csv(f"{ticker.lower()}.csv", index=False)
                     else:
-                        tqdm.write(f"Empty: {ticker} (No rows found)")
+                        tqdm.write(f"Empty: {ticker} on {exchange} (No rows found)")
                 else:
                     msg = json_resp.get('status', {}).get('bCodeMessage', 'Unknown reason')
-                    tqdm.write(f"Skipped {ticker}: {msg}")
+                    tqdm.write(f"Skipped {ticker} on {exchange}: {msg}")
 
             elif response.status_code == 403:
                 tqdm.write("Error: 403 Forbidden. You are likely IP-blocked. Stop the script.")
                 break
             else:
-                tqdm.write(f"Failed {ticker}: HTTP {response.status_code}")
+                tqdm.write(f"Failed {ticker} on {exchange}: HTTP {response.status_code}")
 
         except Exception as e:
-            tqdm.write(f"Error processing {ticker}: {e}")
+            tqdm.write(f"Error processing {ticker} on {exchange}: {e}")
 
         time.sleep(random.uniform(4, 8))
 
