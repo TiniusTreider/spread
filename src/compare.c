@@ -138,7 +138,7 @@ static inline double mean_square_error(
         return square_error_sum / length;
 }
 
-#define LAG 10
+#define LAG 32
 
 static inline double mean_reversion(
         struct date *spread, const struct linear lr, size_t length
