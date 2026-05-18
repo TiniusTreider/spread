@@ -23,7 +23,7 @@ char *io_read_file(char *restrict path)
         const size_t read = fread(buffer, 1, size, file);
         errorif(read != (size_t)size, ERROR_READ_FILE);
 
-        errorif(fclose(file)!= 0, ERROR_CLOSE_FILE);
+        errorif(fclose(file) != 0, ERROR_CLOSE_FILE);
 
         return buffer;
 }
