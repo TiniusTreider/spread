@@ -58,7 +58,7 @@ void printf_bar(struct bar *bar, char *message, ...)
         memset(roof, BAR_ROOF, GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH);
         printf("%s\n", roof);
 
-        printf("|%-*s", GOAL_WIDTH - 1, bar->goal);
+        printf("[%-*s", GOAL_WIDTH - 1, bar->goal);
 
         size_t progress = MIN(
                 (BAR_WIDTH - 2) * bar->curr / bar->max,
@@ -68,11 +68,11 @@ void printf_bar(struct bar *bar, char *message, ...)
         string[progress] = '\0';
 
         memset(string, BAR_CHAR, progress);
-        printf("|%-*s|", BAR_WIDTH - 2, string);
+        printf("]%-*s[", BAR_WIDTH - 2, string);
 
         int precentage = MIN(100 * bar->curr / bar->max, 100);
         printf(
-                " %d%% - %lu/%lu\033[%dG|",
+                " %d%% - %lu/%lu\033[%dG]",
                 precentage,
                 bar->curr, bar->max,
                 GOAL_WIDTH + BAR_WIDTH + NUM_WIDTH

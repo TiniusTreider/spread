@@ -200,7 +200,7 @@ static inline struct pair compare_stocks(struct csv a, struct csv b)
         const double mse = mean_square_error(spread, lr, length);
         const double rho = mean_reversion(spread, lr, length);
         free(spread);
-        printf_bar(bar, "        MSE: %lf\n        Rho: %lf", mse, rho);
+        printf_bar(bar, "        MSE: %lf\n        Rho_%d: %lf", mse, LAG, rho);
 
         return (struct pair){
                 .a = a.ticker, .b = b.ticker,
@@ -225,10 +225,10 @@ static inline void print_pairs(struct pair *pairs, size_t size)
         for (size_t i = 0; i < size; i ++)
         {
                 printf(
-                        "        %2lu.     %-5s - %-5s    MSE: %lf, Rho: %lf\n",
+                        "        %2lu.     %-5s - %-5s    MSE: %lf, Rho_%d: %lf\n",
                         size - i,
                         pairs[i].a, pairs[i].b,
-                        pairs[i].mse, pairs[i].rho
+                        pairs[i].mse, LAG, pairs[i].rho
                 );
 
                 if (size - i - 1 == 20)
@@ -244,7 +244,7 @@ static inline void print_pairs(struct pair *pairs, size_t size)
         FILE *file = fopen(WRITE_FILE, "w");
         errorif(file == NULL, ERROR_OPEN_FILE);
 
-        fprintf(file, "A B MSE Rho\n");
+        fprintf(file, "A B MSE Rho_%d\n", LAG);
         for (int i = size - 1; i >= 0; i--)
         {
                 fprintf(
