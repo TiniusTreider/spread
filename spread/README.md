@@ -4,7 +4,7 @@ spread downloads historical data for the stocks in S&P 500 and NASDAQ-100 from t
 
 ## use
 
-Run `make` to compile, and `make clean` to remove files made for the build. Run `./scrape` to get the data from NASDAQ (this takes about 3 hours). Finally, run `./spread` to see the analasys.
+Run `make` to compile, and `make clean` to remove files made for the build. Run `./scrape` to get the data from NASDAQ (this takes about 3 hours). Finally, run `./spreadb` to see the analasys.
 spread is only supported on Unix.
 MSE is the Mean Square Error, and measures how close the stocks keep
 Rho_n is the Mean Reversion, and measures how fast the spread closes

@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -O3 -Iinclude -march=native -flto -lm -std=c11
 
 sources = $(wildcard src/*)
 objects = $(patsubst src/%.c,build/%.o,$(sources))
-executable = spread
+executable = ../spreadb
 
 .PHONY: all debug
 

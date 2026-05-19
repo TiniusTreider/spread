@@ -3,7 +3,7 @@
 
 #include "stack.h"
 
-#define PATH "scraper/"
+#define PATH "../scraper/"
 
 extern struct stack *stocks;
 
