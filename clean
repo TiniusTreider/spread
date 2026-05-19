@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "cleaning spread..."
+cd spread
+make clean
+cd ..
+
