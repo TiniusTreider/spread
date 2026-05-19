@@ -216,6 +216,13 @@ int compare_pairs(const void *a, const void *b)
         return (x > y) - (x < y);
 }
 
+#define REVERSION 0.1
+
+static inline float spread_period(double rho_n)
+{
+        return LAG * log(0.1) / log(fabs(rho_n));
+}
+
 #define WRITE_FILE "output.txt"
 
 static inline void print_pairs(struct pair *pairs, size_t size)
@@ -225,10 +232,12 @@ static inline void print_pairs(struct pair *pairs, size_t size)
         for (size_t i = 0; i < size; i ++)
         {
                 printf(
-                        "        %2lu.     %-5s - %-5s    MSE: %lf, Rho_%d: %lf\n",
+                        "    %2lu.        %-5s - %-5s  "
+                        "MSE: %.3lf,  Rho_%d: %.3lf,  Period: %.3f\n",
                         size - i,
                         pairs[i].a, pairs[i].b,
-                        pairs[i].mse, LAG, pairs[i].rho
+                        pairs[i].mse, LAG, pairs[i].rho,
+                        spread_period(pairs[i].rho)
                 );
 
                 if (size - i - 1 == 20)
