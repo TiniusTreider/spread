@@ -210,10 +210,10 @@ static inline struct pair compare_stocks(struct csv a, struct csv b)
 
 int compare_pairs(const void *a, const void *b)
 {
-        float x = 1 / ((struct pair*)a)->mse - ((struct pair*)a)->rho;
-        float y = 1 / ((struct pair*)b)->mse - ((struct pair*)b)->rho;
+        float x = ((struct pair*)a)->mse / ((struct pair*)a)->rho;
+        float y = ((struct pair*)b)->mse / ((struct pair*)b)->rho;
 
-        return (x > y) - (x < y);
+        return (x < y) - (x > y);
 }
 
 #define REVERSION 0.1
@@ -223,7 +223,7 @@ static inline float spread_period(double rho_n)
         return LAG * log(0.1) / log(fabs(rho_n));
 }
 
-#define WRITE_FILE "output.txt"
+#define WRITE_FILE "spread/output.txt"
 
 static inline void print_pairs(struct pair *pairs, size_t size)
 {
