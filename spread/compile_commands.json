@@ -15,7 +15,7 @@
       "-o",
       "build/bar.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/bar.o"
   },
   {
@@ -34,7 +34,7 @@
       "-o",
       "build/compare.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/compare.o"
   },
   {
@@ -53,7 +53,7 @@
       "-o",
       "build/csv.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/csv.o"
   },
   {
@@ -72,7 +72,7 @@
       "-o",
       "build/error.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/error.o"
   },
   {
@@ -91,7 +91,7 @@
       "-o",
       "build/io.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/io.o"
   },
   {
@@ -110,7 +110,7 @@
       "-o",
       "build/main.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/main.o"
   },
   {
@@ -129,7 +129,7 @@
       "-o",
       "build/memory.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/memory.o"
   },
   {
@@ -148,7 +148,7 @@
       "-o",
       "build/parse.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/parse.o"
   },
   {
@@ -167,7 +167,7 @@
       "-o",
       "build/stack.o"
     ],
-    "directory": "/home/tinius/cp/spread",
+    "directory": "/home/tinius/cp/trading/spread",
     "output": "build/stack.o"
   }
 ]
